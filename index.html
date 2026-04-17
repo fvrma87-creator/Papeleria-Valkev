@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech & Paper Store</title>
+
+<style>
+body{font-family:Arial;margin:0;background:#f5f6fa}
+
+/* HEADER */
+header{background:#0f172a;color:white;padding:20px;text-align:center;position:relative}
+.carrito-icon{
+position:absolute;right:20px;top:20px;
+background:#25D366;color:white;padding:10px 15px;border-radius:8px;cursor:pointer;
+}
+
+/* MENU */
+nav{background:#1e293b;padding:10px;text-align:center}
+nav button{margin:5px;padding:10px 15px;border:none;border-radius:5px;cursor:pointer}
+
+/* PRODUCTOS */
+.productos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding:30px}
+.card{background:white;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,.1);padding:15px;text-align:center}
+.card img{width:100%;border-radius:10px}
+.precio{color:#16a34a;font-size:22px;font-weight:bold}
+button{border:none;padding:10px 15px;border-radius:6px;cursor:pointer}
+.add{background:#2563eb;color:white}
+
+/* CARRITO */
+.carrito{
+position:fixed;right:-400px;top:0;width:350px;height:100%;
+background:white;box-shadow:-5px 0 15px rgba(0,0,0,.2);
+padding:20px;transition:.3s;overflow:auto;
+}
+.carrito.active{right:0}
+.item{border-bottom:1px solid #ddd;padding:10px 0}
+.total{font-size:22px;font-weight:bold;margin-top:15px}
+.buy{background:#25D366;color:white;width:100%;margin-top:10px}
+
+footer{background:#0f172a;color:white;text-align:center;padding:15px}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Tech & Paper Store</h1>
+<div class="carrito-icon" onclick="toggleCarrito()">🛒 <span id="contador">0</span></div>
+</header>
+
+<nav>
+<button onclick="filtrar('todos')">Todos</button>
+<button onclick="filtrar('papeleria')">Papelería</button>
+<button onclick="filtrar('electronica')">Electrónica</button>
+</nav>
+
+<section class="productos">
+
+<div class="card papeleria">
+<img src="https://via.placeholder.com/300">
+<h3>Cuadernos Profesionales</h3>
+<p class="precio">$120</p>
+<button class="add" onclick="agregar('Cuadernos Profesionales',120)">Agregar al carrito</button>
+</div>
+
+<div class="card papeleria">
+<img src="https://via.placeholder.com/300">
+<h3>Plumas Gel Pack</h3>
+<p class="precio">$85</p>
+<button class="add" onclick="agregar('Plumas Gel',85)">Agregar al carrito</button>
+</div>
+
+<div class="card electronica">
+<img src="https://via.placeholder.com/300">
+<h3>Audífonos Bluetooth</h3>
+<p class="precio">$299</p>
+<button class="add" onclick="agregar('Audifonos Bluetooth',299)">Agregar al carrito</button>
+</div>
+
+<div class="card electronica">
+<img src="https://via.placeholder.com/300">
+<h3>Mouse Inalámbrico</h3>
+<p class="precio">$180</p>
+<button class="add" onclick="agregar('Mouse Inalambrico',180)">Agregar al carrito</button>
+</div>
+
+</section>
+
+<!-- PANEL CARRITO -->
+<div class="carrito" id="carrito">
+<h2>Tu carrito</h2>
+<div id="lista"></div>
+<div class="total" id="total">Total: $0</div>
+<button class="buy" onclick="enviarPedido()">Enviar pedido por WhatsApp</button>
+</div>
+
+<footer>© 2026 Tech & Paper Store</footer>
+
+<script>
+let carrito=[];
+
+function toggleCarrito(){
+document.getElementById("carrito").classList.toggle("active");
+}
+
+function agregar(nombre,precio){
+carrito.push({nombre,precio});
+actualizarCarrito();
+}
+
+function actualizarCarrito(){
+let lista=document.getElementById("lista");
+let total=0;
+lista.innerHTML="";
+
+carrito.forEach(item=>{
+lista.innerHTML+=`<div class="item">${item.nombre} - $${item.precio}</div>`;
+total+=item.precio;
+});
+
+document.getElementById("total").innerText="Total: $"+total;
+document.getElementById("contador").innerText=carrito.length;
+}
+
+function enviarPedido(){
+let telefono="5218991131210";
+let mensaje="Hola, quiero pedir:%0A";
+let total=0;
+
+carrito.forEach(item=>{
+mensaje+= "- "+item.nombre+" $"+item.precio+"%0A";
+total+=item.precio;
+});
+
+mensaje+="Total: $"+total;
+window.open("https://wa.me/"+telefono+"?text="+mensaje);
+}
+
+function filtrar(cat){
+let items=document.querySelectorAll(".card");
+items.forEach(el=>{
+el.style.display=(cat=="todos"||el.classList.contains(cat))?"block":"none";
+});
+}
+</script>
+
+</body>
+</html>
